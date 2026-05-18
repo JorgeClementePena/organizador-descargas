@@ -1,0 +1,120 @@
+{
+  "sourceDir": "%USERPROFILE%\\Downloads",
+  "targetBaseDir": "%USERPROFILE%\\Downloads\\Organizado",
+  "minAgeMinutes": 5,
+  "ignoreExtensions": [
+    ".crdownload",
+    ".download",
+    ".part",
+    ".tmp"
+  ],
+  "ignoreNames": [
+    "desktop.ini"
+  ],
+  "professorMode": {
+    "enabled": true,
+    "folder": "Profesor",
+    "allowedExtensions": [
+      ".pdf",
+      ".doc",
+      ".docx",
+      ".odt",
+      ".xls",
+      ".xlsx",
+      ".ods",
+      ".ppt",
+      ".pptx",
+      ".csv",
+      ".txt",
+      ".md",
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".zip"
+    ],
+    "courses": [
+      "1ESO",
+      "2ESO",
+      "3ESO",
+      "4ESO",
+      "1BACH",
+      "2BACH",
+      "SMR1",
+      "SMR2",
+      "DAM1",
+      "DAM2",
+      "DAW1",
+      "DAW2",
+      "ASIR1",
+      "ASIR2"
+    ]
+  },
+  "rules": [
+    {
+      "name": "PDF",
+      "folder": "PDF",
+      "extensions": [".pdf"]
+    },
+    {
+      "name": "Imagenes",
+      "folder": "Imagenes",
+      "extensions": [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg"]
+    },
+    {
+      "name": "Videos",
+      "folder": "Videos",
+      "extensions": [".mp4", ".mov", ".avi", ".mkv", ".webm"]
+    },
+    {
+      "name": "Audio",
+      "folder": "Audio",
+      "extensions": [".mp3", ".wav", ".flac", ".m4a", ".ogg"]
+    },
+    {
+      "name": "Office",
+      "folder": "Office",
+      "extensions": [".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".csv"]
+    },
+    {
+      "name": "Documentos",
+      "folder": "Documentos",
+      "extensions": [".txt", ".md", ".rtf"]
+    },
+    {
+      "name": "Comprimidos",
+      "folder": "Comprimidos",
+      "extensions": [".zip", ".rar", ".7z", ".tar", ".gz"]
+    },
+    {
+      "name": "Instaladores",
+      "folder": "Instaladores",
+      "extensions": [".exe", ".msi", ".dmg"]
+    },
+    {
+      "name": "Codigo",
+      "folder": "Codigo",
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".ts",
+        ".tsx",
+        ".mjs",
+        ".cjs",
+        ".html",
+        ".css",
+        ".json",
+        ".xml",
+        ".yaml",
+        ".yml",
+        ".py",
+        ".java",
+        ".cs",
+        ".kt"
+      ]
+    }
+  ],
+  "fallback": {
+    "name": "Otros",
+    "folder": "Otros"
+  }
+}

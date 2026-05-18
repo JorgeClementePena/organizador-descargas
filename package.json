@@ -1,0 +1,23 @@
+{
+  "name": "organizador-descargas",
+  "version": "1.0.0",
+  "description": "Organizador personal de descargas con modo prueba, reglas y logs",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js --dry-run",
+    "dry-run": "node src/app.js --dry-run",
+    "apply": "node src/app.js --apply",
+    "json": "node src/app.js --dry-run --json",
+    "undo": "node src/undo.js",
+    "undo:list": "node src/undo.js --list",
+    "undo:dry-run": "node src/undo.js --dry-run"
+  },
+  "keywords": [
+    "node",
+    "automation",
+    "files",
+    "downloads"
+  ],
+  "author": "",
+  "license": "MIT"
+}

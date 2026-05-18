@@ -1,0 +1,3 @@
+logs/*.log
+logs/movimientos/*.json
+node_modules/
