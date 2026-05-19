@@ -8,7 +8,15 @@ Por seguridad, el modo por defecto solo simula lo que haria.
 
 ### Windows facil
 
-Haz doble clic en:
+Para tenerlo en el Escritorio, ejecuta una vez:
+
+```txt
+crear-acceso-escritorio.cmd
+```
+
+Eso crea un acceso directo llamado `Organizador de descargas` en el Escritorio.
+
+Tambien puedes abrir el menu directamente con:
 
 ```txt
 organizador.cmd
