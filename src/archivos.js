@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { crearDestinoProfesor } = require("./profesor");
+const { crearAvisoProfesorSinClase, crearDestinoProfesor } = require("./profesor");
 
 function obtenerExtension(nombreArchivo) {
   return path.extname(nombreArchivo).toLowerCase();
@@ -86,6 +86,18 @@ function crearPlan(config, opciones = {}) {
       omitidos.push({
         nombre: entrada.name,
         motivo: `archivo reciente, menos de ${config.minAgeMinutes} min`
+      });
+      continue;
+    }
+
+    const avisoProfesor = crearAvisoProfesorSinClase(entrada.name, config);
+
+    if (avisoProfesor) {
+      omitidos.push({
+        nombre: entrada.name,
+        motivo: avisoProfesor.motivo,
+        aviso: avisoProfesor.aviso,
+        profesor: avisoProfesor.profesor
       });
       continue;
     }

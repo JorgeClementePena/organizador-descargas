@@ -47,6 +47,22 @@
       "DAW2",
       "ASIR1",
       "ASIR2"
+    ],
+    "classes": [
+      "1ºA",
+      "1ºB",
+      "2ºA",
+      "2ºB",
+      "3ºA",
+      "3ºB",
+      "4ºA",
+      "4ºB"
+    ],
+    "classLetterRequiredCourses": [
+      "1ESO",
+      "2ESO",
+      "3ESO",
+      "4ESO"
     ]
   },
   "rules": [

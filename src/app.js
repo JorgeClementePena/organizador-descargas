@@ -29,13 +29,24 @@ function imprimirPlan(plan, config, opciones) {
     }
   }
 
+  const avisos = plan.omitidos.filter((omitido) => omitido.aviso);
+
+  if (avisos.length > 0) {
+    console.log("");
+    console.log("Avisos:");
+
+    for (const aviso of avisos) {
+      console.log(`- ${aviso.nombre}: ${aviso.motivo}. Se queda en ${config.sourceDir}.`);
+    }
+  }
+
   console.log("");
   console.log(`Archivos a mover: ${plan.acciones.length}`);
   console.log(`Entradas omitidas: ${plan.omitidos.length}`);
 
   if (!opciones.apply) {
     console.log("");
-    console.log("No se movio nada. Usa npm run apply para ejecutar los movimientos.");
+    console.log("No se movio nada. Usa organizador.cmd o npm.cmd run apply para ejecutar los movimientos.");
   }
 
   console.log(`Log: ${logFile}`);

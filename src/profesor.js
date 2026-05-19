@@ -38,6 +38,44 @@ function obtenerCursos(config) {
   return mapa;
 }
 
+function obtenerClases(config) {
+  const classes = config.professorMode?.classes || [];
+  const mapa = new Map();
+
+  for (const clase of classes) {
+    mapa.set(normalizarToken(clase), limpiarSegmentoRuta(clase.toUpperCase()));
+  }
+
+  return mapa;
+}
+
+function quitarLetraFinal(texto) {
+  return String(texto || "")
+    .trim()
+    .replace(/[a-z]$/i, "")
+    .trim();
+}
+
+function obtenerGruposSinLetra(config) {
+  const mapa = new Map();
+  const classes = config.professorMode?.classes || [];
+  const courses = config.professorMode?.classLetterRequiredCourses || [];
+
+  for (const clase of classes) {
+    const base = quitarLetraFinal(clase);
+
+    if (base) {
+      mapa.set(normalizarToken(base), limpiarSegmentoRuta(base.toUpperCase()));
+    }
+  }
+
+  for (const curso of courses) {
+    mapa.set(normalizarToken(curso), limpiarSegmentoRuta(curso.toUpperCase()));
+  }
+
+  return mapa;
+}
+
 function dividirNombreArchivo(nombreArchivo) {
   const parsed = path.parse(nombreArchivo);
   return parsed.name
@@ -46,31 +84,74 @@ function dividirNombreArchivo(nombreArchivo) {
     .filter(Boolean);
 }
 
-function buscarCurso(tokens, cursos) {
+function buscarGrupo(tokens, grupos) {
   for (let i = 0; i < tokens.length; i++) {
     const token = normalizarToken(tokens[i]);
 
-    if (cursos.has(token)) {
+    if (grupos.has(token)) {
       return {
         index: i,
-        curso: cursos.get(token)
+        grupo: grupos.get(token)
       };
     }
 
     if (i + 1 < tokens.length) {
       const combinado = normalizarToken(`${tokens[i]}${tokens[i + 1]}`);
 
-      if (cursos.has(combinado)) {
+      if (grupos.has(combinado)) {
         return {
           index: i,
           endIndex: i + 1,
-          curso: cursos.get(combinado)
+          grupo: grupos.get(combinado)
         };
       }
     }
   }
 
   return null;
+}
+
+function esExtensionProfesorPermitida(nombreArchivo, modo) {
+  const extension = path.extname(nombreArchivo).toLowerCase();
+
+  return modo.allowedExtensions.length === 0 || modo.allowedExtensions.includes(extension);
+}
+
+function crearAvisoProfesorSinClase(nombreArchivo, config) {
+  const modo = config.professorMode;
+
+  if (!modo?.enabled || !esExtensionProfesorPermitida(nombreArchivo, modo)) {
+    return null;
+  }
+
+  const tokens = dividirNombreArchivo(nombreArchivo);
+  const clases = obtenerClases(config);
+
+  if (buscarGrupo(tokens, clases)) {
+    return null;
+  }
+
+  const gruposSinLetra = obtenerGruposSinLetra(config);
+  const grupoSinLetra = buscarGrupo(tokens, gruposSinLetra);
+
+  if (!grupoSinLetra) {
+    return null;
+  }
+
+  const tokensAlumno = tokens.slice(0, grupoSinLetra.index);
+
+  if (tokensAlumno.length < 2) {
+    return null;
+  }
+
+  return {
+    motivo: `documento de profesor sin letra de clase (${grupoSinLetra.grupo}); anade A/B, por ejemplo 4ºA`,
+    aviso: true,
+    profesor: {
+      grupo: grupoSinLetra.grupo,
+      tipo: "clase sin letra"
+    }
+  };
 }
 
 function parsearDocumentoProfesor(nombreArchivo, config) {
@@ -80,21 +161,21 @@ function parsearDocumentoProfesor(nombreArchivo, config) {
     return null;
   }
 
-  const extension = path.extname(nombreArchivo).toLowerCase();
-
-  if (modo.allowedExtensions.length > 0 && !modo.allowedExtensions.includes(extension)) {
+  if (!esExtensionProfesorPermitida(nombreArchivo, modo)) {
     return null;
   }
 
   const tokens = dividirNombreArchivo(nombreArchivo);
+  const clases = obtenerClases(config);
+  const claseEncontrada = buscarGrupo(tokens, clases);
   const cursos = obtenerCursos(config);
-  const cursoEncontrado = buscarCurso(tokens, cursos);
+  const grupoEncontrado = claseEncontrada || buscarGrupo(tokens, cursos);
 
-  if (!cursoEncontrado) {
+  if (!grupoEncontrado) {
     return null;
   }
 
-  const tokensAlumno = tokens.slice(0, cursoEncontrado.index);
+  const tokensAlumno = tokens.slice(0, grupoEncontrado.index);
 
   if (tokensAlumno.length < 2) {
     return null;
@@ -108,8 +189,9 @@ function parsearDocumentoProfesor(nombreArchivo, config) {
     nombre: limpiarSegmentoRuta(nombre),
     apellido: limpiarSegmentoRuta(apellido),
     alumno: limpiarSegmentoRuta(alumno),
-    curso: cursoEncontrado.curso,
-    categoria: `Profesor ${cursoEncontrado.curso}`
+    curso: grupoEncontrado.grupo,
+    clase: claseEncontrada?.grupo || null,
+    categoria: `Profesor ${grupoEncontrado.grupo}`
   };
 }
 
@@ -129,5 +211,6 @@ function crearDestinoProfesor(nombreArchivo, config) {
 
 module.exports = {
   crearDestinoProfesor,
+  crearAvisoProfesorSinClase,
   parsearDocumentoProfesor
 };

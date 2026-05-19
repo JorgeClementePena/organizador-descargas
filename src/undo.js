@@ -100,7 +100,7 @@ function imprimirPlan(plan, opciones) {
 
   if (opciones.dryRun) {
     console.log("");
-    console.log("No se restauro nada. Usa npm run undo para deshacer de verdad.");
+    console.log("No se restauro nada. Usa organizador.cmd o npm.cmd run undo para deshacer de verdad.");
   }
 
   console.log(`Log: ${logFile}`);

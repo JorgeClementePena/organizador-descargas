@@ -74,7 +74,9 @@ function cargarConfig(opciones = {}) {
       enabled: config.professorMode?.enabled === true,
       folder: config.professorMode?.folder || "Profesor",
       allowedExtensions: (config.professorMode?.allowedExtensions || []).map(normalizarExtension),
-      courses: config.professorMode?.courses || []
+      courses: config.professorMode?.courses || [],
+      classes: config.professorMode?.classes || [],
+      classLetterRequiredCourses: config.professorMode?.classLetterRequiredCourses || []
     },
     rules: config.rules.map((rule) => ({
       ...rule,
